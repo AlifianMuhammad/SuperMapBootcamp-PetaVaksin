@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Peta Vaksin</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+    <script src="js/ol/include-ol.js" type="text/javascript"></script>
+
+    <style>
+        .sidebar-config-wrap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 360px;
+            padding: 20px;
+            background: #2c2c2c;
+        }
+
+        .sidebar-config-wrap .panel-group .panel {
+            border-color: transparent;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .sidebar-config-wrap .panel .panel-heading {
+            background: #383838;
+            color: rgba(255, 255, 255, 0.85);
+            border-color: #383838;
+            position: relative;
+        }
+
+        .sidebar-config-wrap .panel .panel-heading::before {
+            content: "";
+            height: 50%;
+            width: 2px;
+            background: #3394dc;
+            position: absolute;
+            top: 25%;
+            left: 0;
+            display: block;
+        }
+
+        .form-group {
+            overflow: hidden;
+        }
+
+        .sidebar-config-wrap .form-control,
+        .sidebar-config-wrap .btn-group {
+            width: 70%;
+            float: right;
+        }
+
+        .sidebar-config-wrap .form-group label {
+            margin-bottom: 0;
+            line-height: 34px;
+        }
+
+        .sidebar-config-wrap .btn-group {
+            display: block;
+            margin-bottom: 10px;
+
+        }
+
+        .sidebar-config-wrap .btn-group button {
+            width: 50%;
+            outline: none;
+        }
+
+        .sidebar-config-wrap .btn-group button:focus {
+            outline: none;
+        }
+
+        .sidebar-config-wrap .panel-title a {
+            width: 100%;
+            display: block;
+            text-decoration: none !important;
+            overflow: hidden;
+        }
+
+        .sidebar-config-wrap .panel-title a span.glyphicon {
+            float: right;
+        }
+
+        .sidebar-config-wrap .panel-title a[aria-expanded="true"] .glyphicon-chevron-down {
+            display: none;
+        }
+
+        .sidebar-config-wrap .panel-title a[aria-expanded="false"] .glyphicon-chevron-up {
+            display: none;
+        }
+
+        .sidebar-config-wrap .submit-btn-wrap {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            line-height: 80px;
+            border-top: 2px solid #323232;
+            text-align: center;
+        }
+
+        .sidebar-config-wrap #printBtn,
+        .sidebar-config-wrap .progress {
+            width: 80%;
+        }
+
+        .sidebar-config-wrap .progress {
+            margin: 30px auto 0;
+        }
+
+        .ol-popup {
+            position: absolute;
+            background-color: white;
+            -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+            filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #cccccc;
+            bottom: 12px;
+            left: -150px;
+            width: 300px;
+        }
+
+        .toolBar {
+            position: absolute;
+            right: 65px;
+            top: 8px;
+            text-align: center;
+            background: #FFF;
+            z-index: 1000;
+            border-radius: 4px;
+        }
+
+        .keyWordsOptions {
+            position: absolute;
+            top: 120px;
+            right: 100px;
+            background-color: white;
+            display: none;
+        }
+    </style>
+</head>
+
+<body style=" margin: 0;overflow: hidden;background: #fff;width: 100%;height:100%; position: absolute;top: 0;">
+    <div id="map" style="width: 100%;height:100%"></div>
+    <div id="printForm" class="sidebar-config-wrap" role="form">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+                            aria-expanded="true" aria-controls="collapseOne">
+                            <span>Dashboard</span>
+                            <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+                            <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="title">Vaccine Level</label>
+                            <select class="form-control" style="width: 150px;" id="VaccineLevel">
+                                <option>Very Low</option>
+                                <option>Low</option>
+                                <option>Medium</option>
+                                <option>High</option>
+                                <option>Very High</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" style="width:45%" id="query"
+                        onclick="queryVaccineLevel()">Query</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="popup" class="ol-popup">
+        <div id="popup-content"></div>
+    </div>
+
+    <div>
+        <div class="panel panel-primary toolBar" id="toolBar">
+            <div class='panel-body content'>
+                <button type="button" class="btn btn-default" id="clickQuery" onclick="clickQuery()">
+                    <span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default" id="measureDistance" onclick="measureDistance()">
+                    <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default" id="measureArea" onclick="measureArea()">
+                    <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default" id="cleardraw" onclick="clearDraw()">
+                    <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default" id="fullExtent" onclick="fullExtent()">
+                    <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+                </button>
+                <button type="button" class="btn btn-default" id="search" onclick="showInput()">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group" id="inputPannel" style="position: absolute; top: 80px; right: 100px; display: none;">
+        <input type="keyWords" class="form-control" id="keyWordsInput" placeholder="Please input key words">
+    </div>
+
+    <div id="keyWordsOptions" class="keyWordsOptions">
+        <select multiple class="form-control" id="keyWordsTable"></select>
+    </div>
+
+    <script type="text/javascript">
+        var map, url = "http://localhost:8090/iserver/services/map-petavaksin/rest/maps/petavaksin";
+        map = new ol.Map({
+            target: 'map',
+            controls: ol.control.defaults({
+                attributionOptions: {
+                    collapsed: false
+                }
+            })
+                .extend([new ol.supermap.control.Logo()]),
+            view: new ol.View({
+                center: [106.77610910697551, -6.24318402101348],
+                zoom: 14,
+                projection: 'EPSG:4326',
+                multiWorld: true
+            })
+        });
+        var layer = new ol.layer.Tile({
+            source: new ol.source.TileSuperMapRest({
+                url: url,
+                wrapX: true
+            }),
+            projection: 'EPSG:4326'
+        });
+
+        map.addControl(new ol.supermap.control.ScaleLine());
+
+
+
+
+        var bingMapLayer = new ol.layer.Tile({
+            visible: true,
+            preload: Infinity,
+            source: new ol.source.BingMaps({
+                key: 'Aug_jpyeictKv9-blHjr0OJOy-hYRR_5bIWhecGYlywC_F6p0LMvQ0Ye8J95tSJt',
+                imagerySet: 'Aerial'
+            })
+        });
+        map.addLayer(bingMapLayer);
+        map.addLayer(layer);
+
+    </script>
+
+    <script type="text/javascript" src="js/toolbar.js"></script>
+    <script type="text/javascript" src="js/sidetab.js"></script>
+    <script type="text/javascript" src="js/editTable.js"></script>
+
+</body>
+
+</html>
